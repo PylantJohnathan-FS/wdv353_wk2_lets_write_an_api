@@ -22,18 +22,19 @@ router.get("/fact", (req,res,next)=>{
     });
 });
 
-router.post("/list", (req,res,next)=>{
-    const maxLegnth = req.body.maxLegnth;
+router.get("/list", (req,res,next)=>{
+    const maxLength = req.body.maxLength;
     const limit = req.body.limit;
-    const urlPassed = `${process.env.url}s?max_legnth=${maxLegnth}&limit=${limit}`;
-    getList(maxLegnth,limit).then(result => {
+    const urlPassed = `${process.env.url}s?max_legnth=${maxLength}&limit=${limit}`;
+    getList(maxLength,limit).then(result => {
+        console.log(result);
         res.status(200).json({
             message: 'List received',
             currentPage: result.current_page,
             fact: result.data.fact,
             metadata:{
                 legnth: result.data.length,
-                maxLegnth: maxLegnth,
+                maxLength: maxLength,
                 limit: limit,
                 url: urlPassed,
             },
