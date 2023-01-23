@@ -3,7 +3,12 @@ require("dotenv").config();
 
 const getFact = async () => {
     console.log("Fetching Real Fact");
-    return await axios.get(`https://catfact.ninja/fact`);
+    return await axios.get(`${process.env.url}`);
 };
 
-module.exports = getFact
+const getList = async (maxLegnth, limit) => {
+    console.log("Fetching Real List");
+    return await axios.get(`${process.env.url}s?max_legnth=${maxLegnth}&limit=${limit}`);
+};
+
+module.exports = getFact, getList

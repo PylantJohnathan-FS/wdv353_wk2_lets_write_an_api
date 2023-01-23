@@ -1,41 +1,49 @@
 const express = require('express');
 const router = express.Router();
-const getTranslation = require('../services/translationService');
-// const getFact = require('../services/catFactsService');
+const getFact = require('../services/catFactsService');
+const getList = require('../services/catFactsService');
 
-/*router.get("/", (req,res)=>{
-    console.log(result.content);
-    console.log("running /get for cat facts");
+router.get("/fact", (req,res,next)=>{
     getFact().then(result => {
+        // console.log(result);
         res.status(200).json({
-            fact: result.content,
+            message: 'Fact received',
+            metadata:{
+                fact: result.data.fact,
+                length: result.data.length,
+            }
         });
     }).catch(error =>{
         res.status(500).json({
             message: error.message,
             status: error.status,
         })
-        console.log("catfacts is not working");
+        console.log("fact is not working");
     });
-});*/
+});
 
-router.post("/", (req, res)=>{
-    const sentence = req.body.sentence;
-    console.log(sentence);
-    getTranslation(sentence).then(result =>{
-        console.log(result);
-        res.status(201).json({
-            text: result.data.contents.text,
-            translated: result.data.contents.translated,
-            translation: result.data.contents.translation,
-        });
-    }).catch(error =>{
-        res.status(501).json({
-            error:{
-                messsage: error.message,
-                status: error.status,
+router.post("/list", (req,res,next)=>{
+    const maxLegnth = req.body.maxLegnth;
+    const limit = req.body.limit;
+    const urlPassed = `${process.env.url}s?max_legnth=${maxLegnth}&limit=${limit}`;
+    getList(maxLegnth,limit).then(result => {
+        res.status(200).json({
+            message: 'List received',
+            currentPage: result.current_page,
+            fact: result.data.fact,
+            metadata:{
+                legnth: result.data.length,
+                maxLegnth: maxLegnth,
+                limit: limit,
+                url: urlPassed,
             },
         });
+    }).catch(error =>{
+        res.status(500).json({
+            message: error.message,
+            status: error.status,
+        })
+        console.log("list is not working");
     });
 });
 
